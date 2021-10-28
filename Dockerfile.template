@@ -1,5 +1,11 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian
+WORKDIR /app
 
 ENV UDEV=on
 
+RUN install_packages jq
+
+COPY scripts .
+
+RUN chmod +x /app/mount.sh
 CMD [ "balena-idle" ]
