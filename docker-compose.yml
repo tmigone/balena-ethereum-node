@@ -2,6 +2,8 @@ version: '2.1'
 
 services:
 
-  test:
+  geth:
     build: ./
     privileged: true
+    ports:
+      - 30303:30303

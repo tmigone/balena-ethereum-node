@@ -1,2 +1,0 @@
-ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="partition", SUBSYSTEMS=="usb", DRIVERS=="usb-storage", RUN+="/bin/sh -c '/usr/src/scripts/mount.sh'"
-ACTION=="remove", SUBSYSTEM=="block", ENV{DEVTYPE}=="partition", SUBSYSTEMS=="usb", DRIVERS=="usb-storage", RUN+="/bin/sh -c '/usr/src/scripts/unmount.sh'"

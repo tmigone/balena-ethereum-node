@@ -1,24 +1,13 @@
 #!/bin/bash
 
-function eth_find_initialized_node () {
-  local FILENAME=${1:-"/blockdevices.json"}
-  local NODE_LABEL=${2:-"ethnode"}
-
-  if [[ -f "$FILENAME" ]]; then
-    cat "$FILENAME" |
-      jq -r ".blockdevices[] | select(.children[]?.label==\"$NODE_LABEL\") | .children[] .path"
-  fi
-}
-
 # eth_validate_devices
 # Validates block devices testing for capabilities as storage medium for an ethereum node
 # Specifically tests for:
 # - ethmeta.usb --> block device is of USB type
 # - ethmeta.usb3 --> block device is capable of and connected to a USB3 port
 # - ethmeta.size --> block device has at least MIN_DISK_SIZE gigabytes of storage
-# Usage: get_block_devices_info $filename $min_disk_size
 # Parameters:
-# - $filename: path to file where results are stored. Default: /blockdevices.json
+# - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
 # - $min_disk_size: minimum disk size required (in GB). Default: 350 GB (required for ethereum mainnet as of Oct/2021)
 function eth_validate_devices () {
   local FILENAME=${1:-"/blockdevices.json"}
@@ -56,6 +45,10 @@ function eth_validate_devices () {
   fi 
 }
 
+# eth_get_candidate_devices
+# Returns a list of block devices that are capable of being used as an ethereum node
+# Parameters:
+# - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
 function eth_get_candidate_devices () {
   local FILENAME=${1:-"/blockdevices.json"}
 
@@ -65,3 +58,17 @@ function eth_get_candidate_devices () {
   fi
 }
 
+# eth_find_initialized_node
+# Checks block devices for an initialized ethereum node, signaled by NODE_LABEL disk label
+# Parameters:
+# - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
+# - $node_label: initialized node disk label. Default: ethnode
+function eth_find_initialized_node () {
+  local FILENAME=${1:-"/blockdevices.json"}
+  local NODE_LABEL=${2:-"ethnode"}
+
+  if [[ -f "$FILENAME" ]]; then
+    cat "$FILENAME" |
+      jq -r ".blockdevices[] | select(.children[]?.label==\"$NODE_LABEL\") | .children[] .path"
+  fi
+}
