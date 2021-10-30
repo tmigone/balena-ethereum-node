@@ -70,12 +70,12 @@ GETH_NETWORK="${GETH_NETWORK:-mainnet}"
 GETH_CACHE="${GETH_CACHE:-1024}"
 GETH_SYNCMODE="${GETH_SYNCMODE:-fast}"
 
-# If command starts with an option, prepend geth to it
+# If command starts with an option (--...), prepend geth
 if [[ "${1#-}" != "$1" ]]; then
   set -- /usr/local/bin/geth "$@"
 fi
 
-# Set geth flags if we are running it
+# Set flags if we are running geth
 if [[ "$1" == *"geth"* ]]; then
   shift
   set -- /usr/local/bin/geth \
@@ -83,6 +83,11 @@ if [[ "$1" == *"geth"* ]]; then
     --cache "$GETH_CACHE" \
     --syncmode "$GETH_SYNCMODE" \
     --datadir "$ETH_NODE_MOUNTPOINT" \
+    --metrics \
+    --metrics.influxdb \
+    --metrics.influxdb.endpoint "http://influxdb:8086" \
+    --metrics.influxdb.database "balena" \
+    --metrics.influxdb.username "geth" \
     "$@"
   echo "$@"
 fi

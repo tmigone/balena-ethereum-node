@@ -1,9 +1,39 @@
 version: '2.1'
 
+volumes:
+    influx-data:
+    dashboard-data:
+
 services:
 
   geth:
-    build: ./
+    build: ./geth
     privileged: true
     ports:
-      - 30303:30303
+      - 30303:30303   # ethereum P2P protocol
+      - 8545:8545     # HTTP-RPC API
+      - 8546:8546     # WS-RPC API
+      - 8547:8547     # GraphQL API
+  
+  influxdb:
+    image: influxdb:1.8.0
+    restart: always
+    expose:
+      - 8086
+    environment:
+      INFLUXDB_DB: balena
+      INFLUXDB_USER: geth
+      INFLUXDB_ADMIN_ENABLED: true
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: admin
+      INFLUXDB_DATA_DIR: /data
+    volumes:
+      - influx-data:/data
+
+  dashboard:
+    build: ./dashboard
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+        - dashboard-data:/data
