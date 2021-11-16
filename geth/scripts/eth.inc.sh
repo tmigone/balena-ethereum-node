@@ -6,20 +6,34 @@
 # - ethmeta.usb --> block device is of USB type
 # - ethmeta.usb3 --> block device is capable of and connected to a USB3 port
 # - ethmeta.size --> block device has at least MIN_DISK_SIZE gigabytes of storage
+# - ethmeta.ssd --> block device is of type SSD
+# - (not implemented) ethmeta.wspeed --> block device can write data faster than MIN_WRITE_SPEED
+# - (not implemented) ethmeta.rspeed --> block device can read data faster than MIN_READ_SPEED
 # Parameters:
 # - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
 # - $min_disk_size: minimum disk size required (in GB). Default: 350 GB (required for ethereum mainnet as of Oct/2021)
 function eth_validate_devices () {
   local FILENAME=${1:-"/blockdevices.json"}
   local MIN_DISK_SIZE=${2:-350}
+  local USB_MIN_VERSION=${3:-3}
+  local MIN_WRITE_SPEED=${4:-50}
+  local MIN_READ_SPEED=${5:-50}
 
   if [[ -f "$FILENAME" ]]; then
     cat "$FILENAME" |
-      jq '.blockdevices[] += { ethmeta: { usb: false, usb3: false, size: false }}' |    # Add ethmeta tracking object
+      jq '.blockdevices[] += { ethmeta: { 
+        usb: false, 
+        usb3: false, 
+        size: false, 
+        ssd: false, 
+        wspeed: false, 
+        rspeed: false 
+      }}' |                                                                             # Add ethmeta tracking object
       jq '(.blockdevices[] | select(.tran=="usb") | .ethmeta.usb) |= true' |            # Validate ethmeta.usb
       jq "(.blockdevices[] | select(.size>=$MIN_DISK_SIZE) | .ethmeta.size) |= true" |  # Validate ethmeta.size
       tee "$FILENAME" > /dev/null                                                       # Save to file
 
+    # Validate USB3
     # Unfortunately get_block_devices (lsblk) can't tell us if a device is USB3 or not, so we have to do this manually...
     # TODO: is there a better way?
     for _device in $(cat "$FILENAME" | jq -r '.blockdevices[] .name'); do
@@ -34,7 +48,7 @@ function eth_validate_devices () {
           # Strip minor version, we don't care 
           local USB_MAJOR_VERSION=$(echo "$USB_VERSION" | awk -F'.' '{print $1}')
 
-          if [[ $USB_MAJOR_VERSION -ge 3 ]]; then
+          if [[ $USB_MAJOR_VERSION -ge "$USB_MIN_VERSION" ]]; then
             cat "$FILENAME" |
               jq "(.blockdevices[] | select(.name==\"$_device\") | .ethmeta.usb3) |= true" |    # Validate ethmeta.usb3
               tee "$FILENAME" > /dev/null                                                       # Save to file
@@ -42,6 +56,33 @@ function eth_validate_devices () {
         fi
       fi
     done
+
+    # Validate SSD
+    # /sys/block/sd*/queue/rotational isn't reporting accurate data, so we use hdparm
+    for _device in $(cat "$FILENAME" | jq -r '.blockdevices[] .name'); do
+      local NMRR=$(hdparm -I "/dev/$_device" | grep "Nominal Media Rotation Rate" | awk -F':' '{gsub(" ",""); print $2}')
+      if [[ "$NMRR" == "SolidStateDevice" ]]; then
+        cat "$FILENAME" |
+          jq "(.blockdevices[] | select(.name==\"$_device\") | .ethmeta.ssd) |= true" |     # Validate ethmeta.ssd
+          tee "$FILENAME" > /dev/null                                                       # Save to file
+      fi
+    done
+
+
+    # Validate write & read speeds
+    # Mount the device and write/read some data to get the actual speeds
+    # However, we only do this for devices that are known to be USB and have enough space for the r/w test
+    # USB_CANDIDATES=($(cat "$FILENAME" |
+    #   jq -r '[.blockdevices[] | select(.ethmeta.usb==true and .ethmeta.size==true) | .children] | flatten | .[] | select(.size>2) | .path'))
+    # 
+    # for _device in "${USB_CANDIDATES[@]}"; do
+    #   mkdir -p "/mnt/tmp"
+    #   mount "$_device" "/mnt/tmp"
+    #   dd if=/dev/zero  of=/mnt/tmp/deleteme.dat bs=32M count=64 oflag=direct
+    #   dd if=/mnt/tmp/deleteme.dat of=/dev/null bs=32M count=64 iflag=direct
+    #   umount "$_device"
+    #   rm -rf "/mnt/tmp"
+    # done
   fi 
 }
 
@@ -54,21 +95,38 @@ function eth_get_candidate_devices () {
 
   if [[ -f "$FILENAME" ]]; then
     cat "$FILENAME" |
-      jq -r '.blockdevices[] | select(.ethmeta.usb==true and .ethmeta.usb3==true and .ethmeta.size==true) | .path'
+      jq -r '.blockdevices[] | select(.ethmeta.usb==true and .ethmeta.usb3==true and .ethmeta.size==true and .ethmeta.ssd==true) | .path'
   fi
 }
 
-# eth_find_initialized_node
-# Checks block devices for an initialized ethereum node, signaled by NODE_LABEL disk label
+# eth_get_ancient_candidate_devices
+# Returns a list of block devices that are capable of being used as ancient storage for an ethereum node
 # Parameters:
 # - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
-# - $node_label: initialized node disk label. Default: ethnode
-function eth_find_initialized_node () {
+# - $node_label: initialized node disk label. Use this to avoid setting same as node. Default: ethnode
+function eth_get_ancient_candidate_devices () {
   local FILENAME=${1:-"/blockdevices.json"}
   local NODE_LABEL=${2:-"ethnode"}
 
   if [[ -f "$FILENAME" ]]; then
     cat "$FILENAME" |
-      jq -r ".blockdevices[] | select(.children[]?.label==\"$NODE_LABEL\") | .children[] .path"
+      jq -r ".blockdevices[] | select(.children[]?.label!=\"$NODE_LABEL\" and .ethmeta.usb==true and .ethmeta.size==true) | .path" |
+      uniq
+  fi
+}
+
+# eth_find_node
+# Checks block devices for an initialized ethereum node, signaled by NODE_LABEL disk label
+# Parameters:
+# - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
+# - $node_label: initialized node disk label. Default: ethnode
+function eth_find_node () {
+  local FILENAME=${1:-"/blockdevices.json"}
+  local NODE_LABEL=${2:-"ethnode"}
+
+  if [[ -f "$FILENAME" ]]; then
+    cat "$FILENAME" |
+      jq -r ".blockdevices[] | select(.children[]?.label==\"$NODE_LABEL\") | .children[] .path" |
+      uniq
   fi
 }
