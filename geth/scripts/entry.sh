@@ -13,7 +13,7 @@ FILENAME=${BLOCKDEVICES_FILENAME:-"/app/blockdevices.json"}
 ETH_NODE_LABEL=${ETH_NODE_LABEL:-"ethnode"}
 ETH_NODE_MOUNTPOINT=${ETH_NODE_MOUNTPOINT:-"/mnt/ethereum"}
 ETH_ANCIENT_NODE_LABEL=${ETH_ANCIENT_NODE_LABEL:-"ethancient"}
-ETH_ANCIENT_NODE_MOUNTPOINT=${ETH_NODE_MOUNTPOINT:-"/mnt/ethereum-ancient"}
+ETH_ANCIENT_NODE_MOUNTPOINT=${ETH_ANCIENT_NODE_MOUNTPOINT:-"/mnt/ethereum-ancient"}
 
 rm -f "$FILENAME"
 mkdir -p "$ETH_NODE_MOUNTPOINT"
@@ -30,7 +30,7 @@ ETH_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_NODE_LABEL")
 if [[ -z "$ETH_NODE_DEVICE" ]]; then
   echo "- Could not find an initialized node! Looking for a suitable block device to initialize..."
 
-  CANDIDATE_DEVICES=($(eth_get_candidate_devices "$FILENAME"))
+  CANDIDATE_DEVICES=($(eth_get_candidate_devices "$FILENAME" "$ETH_NODE_LABEL"))
   echo "- Candidate devices: ${CANDIDATE_DEVICES[@]}"
 
   for DEVICE in "${CANDIDATE_DEVICES[@]}"; do
@@ -59,18 +59,17 @@ fi
 # Proceed only if a device was found
 if [[ -n "$ETH_NODE_DEVICE" ]]; then
   echo "Mounting device (datadir): $ETH_NODE_DEVICE"
-
+  
   if [[ "$BALENA_APP_NAME" == "localapp" ]]; then
     echo "- Device in local mode, skipping mount..."
   else
     mount "$ETH_NODE_DEVICE" "$ETH_NODE_MOUNTPOINT"
     echo "- Device mounted!"
-  fi
+    date > "$ETH_NODE_MOUNTPOINT/last_mounted"
 
-  date > "$ETH_NODE_MOUNTPOINT/last_mounted"
-
-  if [[ -n "$ETH_INIT" ]]; then
-    date > "$ETH_NODE_MOUNTPOINT/initialized"
+    if [[ -n "$ETH_INIT" ]]; then
+      date > "$ETH_NODE_MOUNTPOINT/initialized"
+    fi
   fi
 else
   echo "- Could not find a suitable disk to initialize node. Exiting..."
@@ -83,7 +82,7 @@ ETH_ANCIENT_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_ANCIENT_NODE_LABEL")
 if [[ -z "$ETH_ANCIENT_NODE_DEVICE" ]]; then
   echo "- Could not find an ancient node! Looking for a suitable block device to initialize..."
 
-  ANCIENT_CANDIDATES=($(eth_get_ancient_candidate_devices "$FILENAME"))
+  ANCIENT_CANDIDATES=($(eth_get_ancient_candidate_devices "$FILENAME" "$ETH_ANCIENT_NODE_LABEL"))
   echo "- Candidate devices: ${ANCIENT_CANDIDATES[@]}"
 
   for DEVICE in "${ANCIENT_CANDIDATES[@]}"; do
@@ -118,12 +117,11 @@ if [[ -n "$ETH_ANCIENT_NODE_DEVICE" ]]; then
   else
     mount "$ETH_ANCIENT_NODE_DEVICE" "$ETH_ANCIENT_NODE_MOUNTPOINT"
     echo "- Device mounted!"
-  fi
+    date > "$ETH_ANCIENT_NODE_MOUNTPOINT/last_mounted"
 
-  date > "$ETH_ANCIENT_NODE_MOUNTPOINT/last_mounted"
-
-  if [[ -n "$ETH_ANCIENT_INIT" ]]; then
-    date > "$ETH_ANCIENT_NODE_MOUNTPOINT/initialized"
+    if [[ -n "$ETH_ANCIENT_INIT" ]]; then
+      date > "$ETH_ANCIENT_NODE_MOUNTPOINT/initialized"
+    fi
   fi
 else
   echo "- Could not find a suitable disk to initialize ancient node. Proceeding with $ETH_NODE_DEVICE as ancient."
@@ -158,7 +156,7 @@ if [[ "$1" == *"geth" ]]; then
     set -- "$@" \
       --datadir.ancient "$ETH_ANCIENT_NODE_MOUNTPOINT"
   fi
-  
+
   echo "Starting geth client with command: "
   echo "$@"
 fi

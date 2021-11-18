@@ -106,7 +106,7 @@ function eth_get_candidate_devices () {
 # - $node_label: initialized node disk label. Use this to avoid setting same as node. Default: ethnode
 function eth_get_ancient_candidate_devices () {
   local FILENAME=${1:-"/blockdevices.json"}
-  local NODE_LABEL=${2:-"ethnode"}
+  local NODE_LABEL=${2:-"ethancient"}
 
   if [[ -f "$FILENAME" ]]; then
     cat "$FILENAME" |
