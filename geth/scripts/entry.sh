@@ -161,4 +161,15 @@ if [[ "$1" == *"geth" ]]; then
   echo "$@"
 fi
 
+# Prometheus node exporter
+# This should be on a separate container but we can't mount USB drives in both
+SCRAPE_PORT=${SCRAPE_PORT:-9100}
+
+node_exporter \
+  --log.level=error \
+  --web.listen-address=":$SCRAPE_PORT" \
+  --collector.disable-defaults \
+  --collector.filesystem \
+  --collector.filesystem.ignored-mount-points="^/(dev|proc|sys|var/lib/docker/.+|etc|tmp)($|/)" &
+
 exec "$@"

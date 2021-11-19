@@ -9,11 +9,13 @@ services:
   geth:
     build: ./geth
     privileged: true
+    expose:
+      - 9100          # prometheus node-exporter for disk metrics
     ports:
-      - 30303:30303   # P2P protocol
-      - 8545:8545     # HTTP-RPC API
-      - 8546:8546     # WS-RPC API
-      - 8547:8547     # GraphQL API
+      - 30303:30303   # geth: P2P protocol
+      - 8545:8545     # geth: HTTP-RPC API
+      - 8546:8546     # geth: WS-RPC API
+      - 8547:8547     # geth: GraphQL API
   
   influxdb:
     image: influxdb:1.8.0
@@ -36,4 +38,15 @@ services:
     ports:
       - 80:80
     volumes:
-        - dashboard-data:/data
+      - dashboard-data:/data
+
+  # disk-reporter:
+  #   build: ./disk-reporter
+  #   privileged: true
+  #   expose:
+  #     - 9100
+  
+  prometheus:
+    build: ./prometheus
+    expose:
+      - 9090

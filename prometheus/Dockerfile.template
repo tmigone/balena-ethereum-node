@@ -1,0 +1,9 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.14
+WORKDIR /app
+
+RUN install_packages prometheus
+
+COPY prometheus.yml /etc/prometheus/prometheus.yml 
+COPY start.sh .
+CMD [ "/bin/bash", "/app/start.sh" ]
+

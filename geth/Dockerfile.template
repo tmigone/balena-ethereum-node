@@ -5,7 +5,7 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.14
 WORKDIR /app
 EXPOSE 8545 8546 30303 30303/udp
 
-RUN install_packages lsblk jq parted e2fsprogs e2fsprogs-extra hdparm
+RUN install_packages lsblk jq parted e2fsprogs e2fsprogs-extra hdparm prometheus-node-exporter
 
 COPY --from=client-go /usr/local/bin/geth /usr/local/bin/
 COPY scripts scripts
