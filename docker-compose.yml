@@ -39,12 +39,6 @@ services:
       - 80:80
     volumes:
       - dashboard-data:/data
-
-  # disk-reporter:
-  #   build: ./disk-reporter
-  #   privileged: true
-  #   expose:
-  #     - 9100
   
   prometheus:
     build: ./prometheus
