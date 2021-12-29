@@ -82,7 +82,7 @@ ETH_ANCIENT_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_ANCIENT_NODE_LABEL")
 if [[ -z "$ETH_ANCIENT_NODE_DEVICE" ]]; then
   echo "- Could not find an ancient node! Looking for a suitable block device to initialize..."
 
-  ANCIENT_CANDIDATES=($(eth_get_ancient_candidate_devices "$FILENAME" "$ETH_ANCIENT_NODE_LABEL"))
+  ANCIENT_CANDIDATES=($(eth_get_ancient_candidate_devices "$FILENAME" "$ETH_NODE_LABEL"))
   echo "- Candidate devices: ${ANCIENT_CANDIDATES[@]}"
 
   for DEVICE in "${ANCIENT_CANDIDATES[@]}"; do
