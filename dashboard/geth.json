@@ -16,10 +16,340 @@
   "editable": true,
   "gnetId": 13877,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1635560433581,
+  "id": 2,
+  "iteration": 1644265412890,
   "links": [],
   "panels": [
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 209,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "chain_head_header",
+          "format": "time_series",
+          "groupBy": [],
+          "intervalFactor": 1,
+          "measurement": "geth.chain/head/header.gauge",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$host$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Latest header",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 3,
+        "y": 0
+      },
+      "id": 211,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "chain_head_receipt",
+          "format": "time_series",
+          "groupBy": [],
+          "intervalFactor": 1,
+          "measurement": "geth.chain/head/receipt.gauge",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$host$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Latest receipt",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 6,
+        "y": 0
+      },
+      "id": 213,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "chain_head_block",
+          "format": "time_series",
+          "groupBy": [],
+          "intervalFactor": 1,
+          "measurement": "geth.chain/head/block.gauge",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$host$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Latest block",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
     {
       "collapsed": false,
       "datasource": "InfluxDB",
@@ -27,7 +357,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 2
       },
       "id": 82,
       "panels": [],
@@ -50,9 +380,9 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 8,
+        "w": 6,
         "x": 0,
-        "y": 1
+        "y": 3
       },
       "hiddenSeries": false,
       "id": 106,
@@ -265,9 +595,9 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 8,
-        "x": 8,
-        "y": 1
+        "w": 6,
+        "x": 6,
+        "y": 3
       },
       "hiddenSeries": false,
       "id": 107,
@@ -480,9 +810,9 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 8,
-        "x": 16,
-        "y": 1
+        "w": 6,
+        "x": 12,
+        "y": 3
       },
       "hiddenSeries": false,
       "id": 85,
@@ -601,7 +931,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk",
+      "title": "Disk I/O",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -639,13 +969,117 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 3
+      },
+      "hiddenSeries": false,
+      "id": 215,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pluginVersion": "7.1.3",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "node_filesystem_avail_bytes{mountpoint=\"/geth\"}/1024/1024/1024",
+          "interval": "",
+          "legendFormat": "free",
+          "refId": "A"
+        },
+        {
+          "expr": "(node_filesystem_size_bytes{mountpoint=\"/geth\"} - node_filesystem_avail_bytes{mountpoint=\"/geth\"})/1024/1024/1024",
+          "interval": "",
+          "legendFormat": "used",
+          "refId": "B"
+        },
+        {
+          "expr": "node_filesystem_size_bytes{mountpoint=\"/geth\"}/1024/1024/1024",
+          "interval": "",
+          "legendFormat": "total",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Disk Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decgbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "datasource": "InfluxDB",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 7
+        "y": 9
       },
       "id": 75,
       "panels": [],
@@ -670,7 +1104,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 10
       },
       "hiddenSeries": false,
       "id": 96,
@@ -844,7 +1278,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 10
       },
       "hiddenSeries": false,
       "id": 77,
@@ -1059,7 +1493,7 @@
         "h": 8,
         "w": 6,
         "x": 0,
-        "y": 14
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 198,
@@ -2752,7 +3186,7 @@
         "h": 8,
         "w": 6,
         "x": 6,
-        "y": 14
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 121,
@@ -4445,7 +4879,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 14
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 201,
@@ -6138,7 +6572,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 14
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 199,
@@ -7820,7 +8254,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 24
       },
       "id": 4,
       "panels": [],
@@ -7855,7 +8289,7 @@
         "h": 2,
         "w": 3,
         "x": 0,
-        "y": 23
+        "y": 25
       },
       "id": 108,
       "interval": null,
@@ -7956,7 +8390,7 @@
         "h": 6,
         "w": 9,
         "x": 3,
-        "y": 23
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 110,
@@ -8211,7 +8645,7 @@
         "h": 2,
         "w": 4,
         "x": 12,
-        "y": 23
+        "y": 25
       },
       "id": 183,
       "interval": null,
@@ -8312,7 +8746,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 23
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 116,
@@ -8576,7 +9010,7 @@
         "h": 2,
         "w": 3,
         "x": 0,
-        "y": 25
+        "y": 27
       },
       "id": 111,
       "interval": null,
@@ -8686,7 +9120,7 @@
         "h": 2,
         "w": 2,
         "x": 12,
-        "y": 25
+        "y": 27
       },
       "id": 114,
       "interval": null,
@@ -8796,7 +9230,7 @@
         "h": 2,
         "w": 2,
         "x": 14,
-        "y": 25
+        "y": 27
       },
       "id": 115,
       "interval": null,
@@ -8906,7 +9340,7 @@
         "h": 2,
         "w": 3,
         "x": 0,
-        "y": 27
+        "y": 29
       },
       "id": 109,
       "interval": null,
@@ -9016,7 +9450,7 @@
         "h": 2,
         "w": 4,
         "x": 12,
-        "y": 27
+        "y": 29
       },
       "id": 113,
       "interval": null,
@@ -9134,7 +9568,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 29
+        "y": 31
       },
       "hiddenSeries": false,
       "id": 112,
@@ -9810,7 +10244,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 31
       },
       "hiddenSeries": false,
       "id": 117,
@@ -10408,7 +10842,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 39
+        "y": 41
       },
       "hiddenSeries": false,
       "id": 184,
@@ -10747,7 +11181,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 41
       },
       "hiddenSeries": false,
       "id": 186,
@@ -11496,7 +11930,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 51
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 185,
@@ -11671,7 +12105,7 @@
         "h": 6,
         "w": 8,
         "x": 8,
-        "y": 51
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 187,
@@ -11887,7 +12321,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 51
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 188,
@@ -12103,7 +12537,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 57
+        "y": 59
       },
       "hiddenSeries": false,
       "id": 204,
@@ -12268,7 +12702,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 57
+        "y": 59
       },
       "hiddenSeries": false,
       "id": 205,
@@ -12421,7 +12855,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 63
+        "y": 65
       },
       "hiddenSeries": false,
       "id": 181,
@@ -12555,7 +12989,7 @@
         "h": 6,
         "w": 8,
         "x": 8,
-        "y": 63
+        "y": 65
       },
       "hiddenSeries": false,
       "id": 180,
@@ -12730,7 +13164,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 63
+        "y": 65
       },
       "hiddenSeries": false,
       "id": 182,
@@ -12904,7 +13338,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 69
+        "y": 71
       },
       "hiddenSeries": false,
       "id": 124,
@@ -13242,7 +13676,7 @@
         "h": 6,
         "w": 8,
         "x": 8,
-        "y": 69
+        "y": 71
       },
       "hiddenSeries": false,
       "id": 118,
@@ -13580,7 +14014,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 69
+        "y": 71
       },
       "hiddenSeries": false,
       "id": 119,
@@ -13743,7 +14177,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 75
+        "y": 77
       },
       "id": 17,
       "panels": [],
@@ -13768,7 +14202,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 76
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 175,
@@ -13900,7 +14334,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 76
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 177,
@@ -14033,7 +14467,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 76
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 179,
@@ -14278,7 +14712,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 83
+        "y": 85
       },
       "id": 126,
       "panels": [],
@@ -14305,7 +14739,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 84
+        "y": 86
       },
       "hiddenSeries": false,
       "id": 129,
@@ -14434,7 +14868,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 84
+        "y": 86
       },
       "hiddenSeries": false,
       "id": 131,
@@ -14562,7 +14996,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 89
+        "y": 91
       },
       "hiddenSeries": false,
       "id": 133,
@@ -14727,7 +15161,7 @@
         "h": 5,
         "w": 6,
         "x": 12,
-        "y": 89
+        "y": 91
       },
       "hiddenSeries": false,
       "id": 135,
@@ -14855,7 +15289,7 @@
         "h": 5,
         "w": 6,
         "x": 18,
-        "y": 89
+        "y": 91
       },
       "hiddenSeries": false,
       "id": 137,
@@ -14983,7 +15417,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 94
+        "y": 96
       },
       "hiddenSeries": false,
       "id": 139,
@@ -15148,7 +15582,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 94
+        "y": 96
       },
       "hiddenSeries": false,
       "id": 141,
@@ -15313,7 +15747,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 99
+        "y": 101
       },
       "hiddenSeries": false,
       "id": 143,
@@ -15627,7 +16061,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 105
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 145,
@@ -15756,7 +16190,7 @@
         "h": 14,
         "w": 9,
         "x": 6,
-        "y": 105
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 147,
@@ -16143,7 +16577,7 @@
         "h": 14,
         "w": 9,
         "x": 15,
-        "y": 105
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 149,
@@ -16531,7 +16965,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 112
+        "y": 114
       },
       "hiddenSeries": false,
       "id": 151,
@@ -16661,7 +17095,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 119
+        "y": 121
       },
       "hiddenSeries": false,
       "id": 153,
@@ -16790,7 +17224,7 @@
         "h": 14,
         "w": 9,
         "x": 6,
-        "y": 119
+        "y": 121
       },
       "hiddenSeries": false,
       "id": 157,
@@ -17177,7 +17611,7 @@
         "h": 14,
         "w": 9,
         "x": 15,
-        "y": 119
+        "y": 121
       },
       "hiddenSeries": false,
       "id": 159,
@@ -17565,7 +17999,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 126
+        "y": 128
       },
       "hiddenSeries": false,
       "id": 155,
@@ -17694,7 +18128,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 133
+        "y": 135
       },
       "hiddenSeries": false,
       "id": 161,
@@ -18081,7 +18515,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 140
+        "y": 142
       },
       "hiddenSeries": false,
       "id": 163,
@@ -18246,7 +18680,7 @@
         "h": 7,
         "w": 9,
         "x": 6,
-        "y": 140
+        "y": 142
       },
       "hiddenSeries": false,
       "id": 167,
@@ -18411,7 +18845,7 @@
         "h": 7,
         "w": 9,
         "x": 15,
-        "y": 140
+        "y": 142
       },
       "hiddenSeries": false,
       "id": 171,
@@ -18663,7 +19097,7 @@
         "h": 9,
         "w": 6,
         "x": 0,
-        "y": 147
+        "y": 149
       },
       "id": 165,
       "options": {
@@ -18913,7 +19347,7 @@
         "h": 9,
         "w": 9,
         "x": 6,
-        "y": 147
+        "y": 149
       },
       "hiddenSeries": false,
       "id": 169,
@@ -19300,7 +19734,7 @@
         "h": 9,
         "w": 9,
         "x": 15,
-        "y": 147
+        "y": 149
       },
       "hiddenSeries": false,
       "id": 173,
@@ -19777,5 +20211,5 @@
   "timezone": "",
   "title": "Geth Dashboard",
   "uid": "QC1Arp5Wk",
-  "version": 1
+  "version": 5
 }

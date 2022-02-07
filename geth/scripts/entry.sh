@@ -19,118 +19,72 @@ rm -f "$FILENAME"
 mkdir -p "$ETH_NODE_MOUNTPOINT"
 mkdir -p "$ETH_ANCIENT_NODE_MOUNTPOINT"
 
+echo "--- Block devices ---"
 echo "Fetching block device's data..."
 get_block_devices "$FILENAME"
 eth_validate_devices "$FILENAME"
-echo "- Devices found: $(print_block_devices $FILENAME)"
+echo "Found block devices: $(print_block_devices $FILENAME)"
 
-echo "Checking devices for an initialized node..."
-ETH_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_NODE_LABEL")
+echo -e "\n--- Geth main storage node ---"
+CANDIDATES=($(eth_get_onboard_node_candidates "$FILENAME"))
 
-if [[ -z "$ETH_NODE_DEVICE" ]]; then
-  echo "- Could not find an initialized node! Looking for a suitable block device to initialize..."
-
-  CANDIDATE_DEVICES=($(eth_get_candidate_devices "$FILENAME" "$ETH_NODE_LABEL"))
-  echo "- Candidate devices: ${CANDIDATE_DEVICES[@]}"
-
-  for DEVICE in "${CANDIDATE_DEVICES[@]}"; do
-    # Initialize
-    echo "- Formatting $DEVICE..."
-    format_block_device "$DEVICE" "$ETH_NODE_LABEL"
-
-    # Validate and check again
-    get_block_devices "$FILENAME"
-    eth_validate_devices "$FILENAME"
-    ETH_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_NODE_LABEL")
-    echo "- eth_node_device: $ETH_NODE_DEVICE"
-
-    if [[ -n "$ETH_NODE_DEVICE" ]]; then
-      ETH_INIT="true"
-      echo "- Device $DEVICE was successfully initialized!"
-      break
-    else
-      echo "- Could not initialize $DEVICE. Trying with next device..."
-    fi
-  done
+if [[ -n "$CANDIDATES" ]]; then
+  # MAIN NODE --> ONBOARD
+  ETH_NODE_MOUNTPOINT="/geth"
+  ETH_NODE_LABEL="/geth"
+  echo "Main drive is suitable, using it as geth node"
 else
-  echo "- Found initialized node at $ETH_NODE_DEVICE"
-fi
+  # MAIN NODE --> USB
+  echo "Checking devices for an initialized node..."
+  ETH_NODE_DEVICE=$(eth_find_usb_node "$FILENAME" "$ETH_NODE_LABEL")
 
-# Proceed only if a device was found
-if [[ -n "$ETH_NODE_DEVICE" ]]; then
-  echo "Mounting device (datadir): $ETH_NODE_DEVICE"
-  
-  if [[ "$BALENA_APP_NAME" == "localapp" ]]; then
-    echo "- Device in local mode, skipping mount..."
+  if [[ -z "$ETH_NODE_DEVICE" ]]; then
+    echo "Could not find an initialized node!"
+    eth_usb_node_initialize "$FILENAME" "$ETH_NODE_LABEL"
   else
-    mount "$ETH_NODE_DEVICE" "$ETH_NODE_MOUNTPOINT"
-    echo "- Device mounted!"
-    date > "$ETH_NODE_MOUNTPOINT/last_mounted"
-
-    if [[ -n "$ETH_INIT" ]]; then
-      date > "$ETH_NODE_MOUNTPOINT/initialized"
-    fi
+    echo "Found initialized node at $ETH_NODE_DEVICE"
   fi
-else
-  echo "- Could not find a suitable disk to initialize node. Exiting..."
-  exit 1
+
+  ETH_NODE_DEVICE=$(eth_find_usb_node "$FILENAME" "$ETH_NODE_LABEL")
+
+  if [[ -n "$ETH_NODE_DEVICE" ]]; then
+    mount_block_device "$ETH_NODE_DEVICE" "$ETH_NODE_MOUNTPOINT"
+  else
+    echo "Could not find a suitable usb disk to initialize node. Exiting..."
+    exit 1
+  fi
 fi
 
-# Check if additional drive for ancient
-echo "Checking devices for an ancient node..."
-ETH_ANCIENT_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_ANCIENT_NODE_LABEL")
+echo "Ethereum node: $ETH_NODE_DEVICE@$ETH_NODE_MOUNTPOINT"
+
+# ANCIENT NODE --> USB
+echo -e "\n--- Geth ancient storage node ---"
+echo "Checking devices for an initialized ancient node..."
+ETH_ANCIENT_NODE_DEVICE=$(eth_find_usb_node "$FILENAME" "$ETH_ANCIENT_NODE_LABEL")
+
 if [[ -z "$ETH_ANCIENT_NODE_DEVICE" ]]; then
-  echo "- Could not find an ancient node! Looking for a suitable block device to initialize..."
-
-  ANCIENT_CANDIDATES=($(eth_get_ancient_candidate_devices "$FILENAME" "$ETH_NODE_LABEL"))
-  echo "- Candidate devices: ${ANCIENT_CANDIDATES[@]}"
-
-  for DEVICE in "${ANCIENT_CANDIDATES[@]}"; do
-    # Initialize
-    echo "- Formatting $DEVICE..."
-    format_block_device "$DEVICE" "$ETH_ANCIENT_NODE_LABEL"
-
-    # Validate and check again
-    get_block_devices "$FILENAME"
-    eth_validate_devices "$FILENAME"
-    ETH_ANCIENT_NODE_DEVICE=$(eth_find_node "$FILENAME" "$ETH_ANCIENT_NODE_LABEL")
-    echo "- eth_ancient_node_device: $ETH_ANCIENT_NODE_DEVICE"
-
-    if [[ -n "$ETH_ANCIENT_NODE_DEVICE" ]]; then
-      ETH_ANCIENT_INIT="true"
-      echo "- Device $DEVICE was successfully initialized as ancient node!"
-      break
-    else
-      echo "- Could not initialize $DEVICE. Trying with next device..."
-    fi
-  done
+  echo "Could not find an initialized node!"
+  eth_usb_node_initialize "$FILENAME" "$ETH_ANCIENT_NODE_LABEL" "$ETH_NODE_LABEL"
 else
-  echo "- Found initialized ancient node at $ETH_ANCIENT_NODE_DEVICE"
+  echo "Found initialized node at $ETH_ANCIENT_NODE_LABEL"
 fi
 
-# Mount ancient if we've got one
+ETH_ANCIENT_NODE_DEVICE=$(eth_find_usb_node "$FILENAME" "$ETH_ANCIENT_NODE_LABEL")
+
 if [[ -n "$ETH_ANCIENT_NODE_DEVICE" ]]; then
-  echo "Mounting device (datadir.ancient): $ETH_ANCIENT_NODE_DEVICE"
-
-  if [[ "$BALENA_APP_NAME" == "localapp" ]]; then
-    echo "- Device in local mode, skipping mount..."
-  else
-    mount "$ETH_ANCIENT_NODE_DEVICE" "$ETH_ANCIENT_NODE_MOUNTPOINT"
-    echo "- Device mounted!"
-    date > "$ETH_ANCIENT_NODE_MOUNTPOINT/last_mounted"
-
-    if [[ -n "$ETH_ANCIENT_INIT" ]]; then
-      date > "$ETH_ANCIENT_NODE_MOUNTPOINT/initialized"
-    fi
-  fi
+  mount_block_device "$ETH_ANCIENT_NODE_DEVICE" "$ETH_ANCIENT_NODE_MOUNTPOINT"
+  echo -e "\nEthereum ancient node: $ETH_ANCIENT_NODE_DEVICE@$ETH_ANCIENT_NODE_MOUNTPOINT"
 else
-  echo "- Could not find a suitable disk to initialize ancient node. Proceeding with $ETH_NODE_DEVICE as ancient."
+  echo -e "\nCould not find a suitable usb disk to initialize an ancient node, skipping..."
 fi
 
 # geth default flags
 GETH_NETWORK="${GETH_NETWORK:-mainnet}"
 GETH_CACHE="${GETH_CACHE:-1024}"
-GETH_SYNCMODE="${GETH_SYNCMODE:-fast}"
+GETH_SYNCMODE="${GETH_SYNCMODE:-snap}"
+GETH_RPC_HTTP="${GETH_RPC_HTTP:-true}"
+GETH_RPC_WS="${GETH_RPC_WS:-true}"
+GETH_RPC_API="${GETH_RPC_API:-eth,net,web3}"
 
 # If command starts with an option (--...), prepend geth
 if [[ "${1#-}" != "$1" ]]; then
@@ -152,13 +106,38 @@ if [[ "$1" == *"geth" ]]; then
     --metrics.influxdb.username "geth" \
     "$@"
 
+  # Ancient
   if [[ -n "$ETH_ANCIENT_NODE_DEVICE" ]]; then
     set -- "$@" \
       --datadir.ancient "$ETH_ANCIENT_NODE_MOUNTPOINT"
   fi
 
-  echo "Starting geth client with command: "
-  echo "$@"
+  # HTTP-RPC
+  if [[ "$GETH_RPC_HTTP" == true ]]; then
+    set -- "$@" \
+      --http \
+      --http.addr "0.0.0.0" \
+      --http.corsdomain "*" \
+      --http.api "$GETH_RPC_API"
+  fi
+
+  # WS-RPC
+  if [[ "$GETH_RPC_HTTP" == true ]]; then
+    set -- "$@" \
+      --ws \
+      --ws.addr "0.0.0.0" \
+      --ws.origins "*" \
+      --ws.api "$GETH_RPC_API"
+  fi
+fi
+
+echo -e "\n--- Geth ---"
+echo "Running geth with the following parameters:"
+echo "$@"
+
+# Don't actually start geth if we are on local mode
+if [[ "$BALENA_APP_NAME" == "localapp" ]]; then
+  balena-idle
 fi
 
 # Prometheus node exporter
@@ -169,7 +148,7 @@ node_exporter \
   --log.level=error \
   --web.listen-address=":$SCRAPE_PORT" \
   --collector.disable-defaults \
-  --collector.filesystem \
-  --collector.filesystem.ignored-mount-points="^/(dev|proc|sys|var/lib/docker/.+|etc|tmp)($|/)" &
+  --collector.filesystem &
+  # --collector.filesystem.ignored-mount-points="^/(dev|proc|sys|var/lib/docker/.+|etc|tmp)($|/)" &
 
 exec "$@"

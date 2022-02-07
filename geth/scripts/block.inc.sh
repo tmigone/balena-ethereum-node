@@ -56,3 +56,24 @@ function format_block_device () {
     sleep 5
   fi
 }
+
+# mount_block_device
+# Mounts a block device to the given mountpoint. Skipped if running in balena local mode.
+# Parameters:
+# - $device: block device to be mounted
+# - $mountpoint: mountpoint to mount the device to
+function mount_block_device () {
+  local DEVICE="$1"
+  local MOUNTPOINT="$2"
+
+  if [[ -n "$DEVICE" && -n "$MOUNTPOINT" ]]; then
+    echo "Mounting $DEVICE@$MOUNTPOINT"
+
+    if [[ "$BALENA_APP_NAME" == "localapp" ]]; then
+      echo "Device in local mode, skipping mount..."
+    else
+      mount "$DEVICE" "$MOUNTPOINT"
+      echo "Device mounted!"
+    fi
+  fi
+}

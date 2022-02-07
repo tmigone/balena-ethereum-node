@@ -3,6 +3,7 @@ version: '2.1'
 volumes:
     influx-data:
     dashboard-data:
+    geth-data:
 
 services:
 
@@ -16,6 +17,8 @@ services:
       - 8545:8545     # geth: HTTP-RPC API
       - 8546:8546     # geth: WS-RPC API
       - 8547:8547     # geth: GraphQL API
+    volumes:
+    - geth-data:/geth
   
   influxdb:
     image: influxdb:1.8.0
@@ -44,3 +47,11 @@ services:
     build: ./prometheus
     expose:
       - 9090
+
+  hostname:
+    image: balenablocks/hostname
+    restart: no
+    labels:
+      io.balena.features.supervisor-api: 1
+    environment:
+      SET_HOSTNAME: geth

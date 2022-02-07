@@ -1,9 +1,10 @@
-FROM ethereum/client-go:v1.10.11 as client-go
+FROM ethereum/client-go:v1.10.15 as client-go
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.14
 
 WORKDIR /app
 EXPOSE 8545 8546 30303 30303/udp
+ENV UDEV=on
 
 RUN install_packages lsblk jq parted e2fsprogs e2fsprogs-extra hdparm prometheus-node-exporter
 
@@ -12,5 +13,4 @@ COPY scripts scripts
 
 ENTRYPOINT [ "/bin/bash", "/app/scripts/entry.sh" ]
 
-#dev-cmd-live=balena-idle
 CMD [ "geth" ]
