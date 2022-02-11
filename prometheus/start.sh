@@ -1,3 +1,3 @@
 #!/bin/bash
 
-prometheus --config.file=/etc/prometheus/prometheus.yml
+prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path="/prometheus"

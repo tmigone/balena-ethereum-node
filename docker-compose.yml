@@ -4,6 +4,7 @@ volumes:
     influx-data:
     dashboard-data:
     geth-data:
+    prometheus-data:
 
 services:
 
@@ -47,6 +48,8 @@ services:
     build: ./prometheus
     expose:
       - 9090
+    volumes:
+      - prometheus-data:/prometheus
 
   hostname:
     image: balenablocks/hostname
