@@ -2,7 +2,6 @@ name: balena-ethereum-node
 type: sw.application
 description: >-
   Run an ethereum node with one click! 🚀
-
   Easy geth client setup with metrics dashboard.
 fleetcta: Don't trust, verify!
 post-provisioning: >-
