@@ -23,7 +23,10 @@ Geth [requirements](https://docs.ethhub.io/using-ethereum/ethereum-clients/geth/
 - Fast SSD with at least 1TB free space
 - 25+ MBit/sec download Internet service
 
+**Using a USB drive**
+If you don't have an SSD with enough space you can use an USB SSD drive instead (just make sure to use a USB 3.0 port). The startup script will automatically detect, format, mount the drive and configure geth to use it as the data directory. 
 
+__WARNING__: plugging in a USB drive will format the device, erasing all data on it! Make sure to backup any files you want to keep before doing this.
 
 ## Installation
 

@@ -10,10 +10,8 @@ post-provisioning: >-
   Once you power up your device you'll need to allow some time for it to download the main application, this typically takes a few minutes but it can take more depending on your internet connection.
   **Usage**
   When the download is completed the geth client will start syncing to mainnet. At this point you'll be able to access the grafana dashboard at http://geth or http://geth.local to track sync progress
-  and view system metrics.
-  Default settings for the client:
-  - Sync to mainnet using 'snap' sync.
-  - HTTP and WS RCP servers enabled with 'eth,net,web3' namespaces.
+  and view system metrics. By default the client syncs to mainnet using 'snap' sync and has HTTP and WS RCP servers enabled with 'eth,net,web3' namespaces.
+  See the project's [README.md](https://github.com/tmigone/balena-ethereum-node) for details on how to deploy a node with custom configuration.
 assets:
   repository:
     type: blob.asset
