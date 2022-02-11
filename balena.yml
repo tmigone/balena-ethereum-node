@@ -1,0 +1,36 @@
+name: balena-ethereum-node
+type: sw.application
+description: >-
+  Run an ethereum node with one click! 🚀
+  Easy geth client setup with metrics dashboard.
+fleetcta: Don't trust, verify!
+post-provisioning: >-
+  ## Usage instructions
+  **Application download**
+  Once you power up your device you'll need to allow some time for it to download the main application, this typically takes a few minutes but it can take more depending on your internet connection.
+  **Usage**
+  When the download is completed the geth client will start syncing to mainnet. At this point you'll be able to access the grafana dashboard at http://geth or http://geth.local to track sync progress
+  and view system metrics.
+  Default settings for the client:
+  - Sync to mainnet using 'snap' sync.
+  - HTTP and WS RCP servers enabled with 'eth,net,web3' namespaces.
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/tmigone/balena-ethereum-node'
+  logo:
+    type: blob.asset
+    data:
+      url: >-
+        https://raw.githubusercontent.com/tmigone/balena-ethereum-node/master/assets/logo.png
+data:
+  applicationEnvironmentVariables:
+    - GETH_NETWORK: mainnet
+    - GETH_SYNCMODE: snap
+    - GETH_RPC_HTTP: true
+    - GETH_RPC_WS: true
+    - GETH_RPC_API: eth,net,web3
+  defaultDeviceType: intel-nuc
+  supportedDeviceTypes:
+    - intel-nuc

@@ -4,11 +4,11 @@
 # Validates block devices testing for capabilities as storage medium for an ethereum node
 # Specifically tests for:
 # - ethmeta.usb --> block device is of USB type
-# - ethmeta.usb3 --> block device is capable of and connected to a USB3 port
 # - ethmeta.size --> block device has at least MIN_DISK_SIZE gigabytes of storage
 # - ethmeta.ssd --> block device is of type SSD
-# - (not implemented) ethmeta.wspeed --> block device can write data faster than MIN_WRITE_SPEED
-# - (not implemented) ethmeta.rspeed --> block device can read data faster than MIN_READ_SPEED
+# - ethmeta.usb3 --> block device is capable of and connected to a USB3 port (implemented but unreliable) 
+# - ethmeta.wspeed --> block device can write data faster than MIN_WRITE_SPEED (not implemented)
+# - ethmeta.rspeed --> block device can read data faster than MIN_READ_SPEED (not implemented)
 # Parameters:
 # - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
 # - $min_disk_size: minimum disk size required (in GB). Default: 350 GB (required for ethereum mainnet as of Oct/2021)
@@ -101,6 +101,7 @@ function eth_get_onboard_node_candidates () {
 
 # eth_get_usb_node_candidates
 # Returns a list of block devices that are capable of being used as an ethereum node
+# USB3 reporting is not reliable so we don't filter on that.
 # Parameters:
 # - $filename: path to file where blockdevice data is stored. Default: /blockdevices.json
 function eth_get_usb_node_candidates () {

@@ -7,13 +7,23 @@ This project makes deploying an ethereum node to a balenaOS device super simple.
 - An [influxdb](https://www.influxdata.com/) database for storing metrics
 - A [grafana](https://grafana.com/) dashboard for monitoring
 
+![dashboard](assets/dashboard.png)
+
 ## Supported architectures
 
 The following device types and architectures are supported:
 - Intel Nuc (amd64)
 - Raspberry Pi 4 (aarch64) - WIP
 
-__Note__: Geth [requirements](https://docs.ethhub.io/using-ethereum/ethereum-clients/geth/) specify a minimum of 4GB of RAM and 320GB of SSD disk space available in order to properly sync your node to ethereum's mainnet. In practice, as of February 2022, 320GB is nowhere near enough to run a full node. The initial sync will take up to 500GB, so if you want to have some leeway you'll want to run with at least 1TB of disk space.
+## Hardware requirements
+
+Geth [requirements](https://docs.ethhub.io/using-ethereum/ethereum-clients/geth/) specify a minimum of 4GB of RAM and 320GB of SSD disk space available in order to properly sync your node to ethereum's mainnet. In practice, as of February 2022, 320GB is nowhere near enough to run a full node. The initial sync will take up to 500GB, so if you want to have some leeway you'll want to run with at least 1TB of disk space. Based on this the recommended specs are:
+- Fast CPU with 4+ cores
+- 16GB+ RAM
+- Fast SSD with at least 1TB free space
+- 25+ MBit/sec download Internet service
+
+
 
 ## Installation
 
