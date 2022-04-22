@@ -1,6 +1,0 @@
-FROM balenablocks/dashboard:aarch64-1.1.4
-
-COPY ./geth.json /usr/share/grafana/conf/provisioning/dashboards
-COPY ./disk-usage.json /usr/share/grafana/conf/provisioning/dashboards
-COPY ./dashboards.yml /usr/share/grafana/conf/provisioning/dashboards
-COPY ./prometheus-datasource.yml /usr/share/grafana/conf/provisioning/datasources
