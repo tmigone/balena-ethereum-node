@@ -1,4 +1,4 @@
-FROM ethereum/client-go:v1.10.15 as client-go
+FROM ethereum/client-go:v1.10.17 as client-go
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.14
 
