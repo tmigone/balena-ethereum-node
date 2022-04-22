@@ -1,4 +1,4 @@
-FROM balenablocks/dashboard:amd64-1.1.4
+FROM balenablocks/dashboard:%%BALENA_ARCH%%-1.1.4
 
 COPY ./geth.json /usr/share/grafana/conf/provisioning/dashboards
 COPY ./disk-usage.json /usr/share/grafana/conf/provisioning/dashboards
